@@ -1,8 +1,6 @@
 <?php
-/* Copyright (C) 2004-2018  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2018-2019  Nicolas ZABOURI         <info@inovea-conseil.com>
- * Copyright (C) 2019       Frédéric France         <frederic.france@netlogic.fr>
- * Copyright (C) 2020 SuperAdmin
+/* Copyright (C) 2020 Andor Molnár <andor@apache.org>
+ * 
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +18,7 @@
 
 /**
  * 	\defgroup   natsend     Module Natsend
- *  \brief      Natsend module descriptor.
+ *  \brief      NAT Send module descriptor.
  *
  *  \file       htdocs/natsend/core/modules/modNatsend.class.php
  *  \ingroup    natsend
@@ -265,160 +263,8 @@ class modNatsend extends DolibarrModules
         $this->menu = array();
         $r = 0;
         // Add here entries to declare new menus
-        /* BEGIN MODULEBUILDER TOPMENU */
-        $this->menu[$r++] = array(
-            'fk_menu'=>'', // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-            'type'=>'top', // This is a Top menu entry
-            'titre'=>'Natsend',
-            'mainmenu'=>'natsend',
-            'leftmenu'=>'',
-            'url'=>'/natsend/natsendindex.php',
-            'langs'=>'natsend@natsend', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-            'position'=>1000 + $r,
-            'enabled'=>'$conf->natsend->enabled', // Define condition to show or hide menu entry. Use '$conf->natsend->enabled' if entry must be visible if module is enabled.
-            'perms'=>'$user->rights->natsend->natstatus->read', // Use 'perms'=>'$user->rights->natsend->level1->level2' if you want your menu with a permission rules
-            'target'=>'',
-            'user'=>2, // 0=Menu for internal users, 1=external users, 2=both
-        );
-        /* END MODULEBUILDER TOPMENU */
-        /* BEGIN MODULEBUILDER LEFTMENU NATSTATUS
-        $this->menu[$r++]=array(
-            'fk_menu'=>'fk_mainmenu=natsend',      // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-            'type'=>'left',                          // This is a Top menu entry
-            'titre'=>'NatStatus',
-            'mainmenu'=>'natsend',
-            'leftmenu'=>'natstatus',
-            'url'=>'/natsend/natsendindex.php',
-            'langs'=>'natsend@natsend',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-            'position'=>1000+$r,
-            'enabled'=>'$conf->natsend->enabled',  // Define condition to show or hide menu entry. Use '$conf->natsend->enabled' if entry must be visible if module is enabled.
-            'perms'=>'$user->rights->natsend->natstatus->read',			                // Use 'perms'=>'$user->rights->natsend->level1->level2' if you want your menu with a permission rules
-            'target'=>'',
-            'user'=>2,				                // 0=Menu for internal users, 1=external users, 2=both
-        );
-        $this->menu[$r++]=array(
-            'fk_menu'=>'fk_mainmenu=natsend,fk_leftmenu=natstatus',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-            'type'=>'left',			                // This is a Left menu entry
-            'titre'=>'List NatStatus',
-            'mainmenu'=>'natsend',
-            'leftmenu'=>'natsend_natstatus_list',
-            'url'=>'/natsend/natstatus_list.php',
-            'langs'=>'natsend@natsend',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-            'position'=>1000+$r,
-            'enabled'=>'$conf->natsend->enabled',  // Define condition to show or hide menu entry. Use '$conf->natsend->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-            'perms'=>'$user->rights->natsend->natstatus->read',			                // Use 'perms'=>'$user->rights->natsend->level1->level2' if you want your menu with a permission rules
-            'target'=>'',
-            'user'=>2,				                // 0=Menu for internal users, 1=external users, 2=both
-        );
-        $this->menu[$r++]=array(
-            'fk_menu'=>'fk_mainmenu=natsend,fk_leftmenu=natstatus',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-            'type'=>'left',			                // This is a Left menu entry
-            'titre'=>'New NatStatus',
-            'mainmenu'=>'natsend',
-            'leftmenu'=>'natsend_natstatus_new',
-            'url'=>'/natsend/natstatus_page.php?action=create',
-            'langs'=>'natsend@natsend',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-            'position'=>1000+$r,
-            'enabled'=>'$conf->natsend->enabled',  // Define condition to show or hide menu entry. Use '$conf->natsend->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-            'perms'=>'$user->rights->natsend->natstatus->write',			                // Use 'perms'=>'$user->rights->natsend->level1->level2' if you want your menu with a permission rules
-            'target'=>'',
-            'user'=>2,				                // 0=Menu for internal users, 1=external users, 2=both
-        );
-        */
-
-        $this->menu[$r++]=array(
-            // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-            'fk_menu'=>'fk_mainmenu=natsend',
-            // This is a Left menu entry
-            'type'=>'left',
-            'titre'=>'List NatStatus',
-            'mainmenu'=>'natsend',
-            'leftmenu'=>'natsend_natstatus',
-            'url'=>'/natsend/natstatus_list.php',
-            // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-            'langs'=>'natsend@natsend',
-            'position'=>1100+$r,
-            // Define condition to show or hide menu entry. Use '$conf->natsend->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-            'enabled'=>'$conf->natsend->enabled',
-            // Use 'perms'=>'$user->rights->natsend->level1->level2' if you want your menu with a permission rules
-            'perms'=>'1',
-            'target'=>'',
-            // 0=Menu for internal users, 1=external users, 2=both
-            'user'=>2,
-        );
-        $this->menu[$r++]=array(
-            // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-            'fk_menu'=>'fk_mainmenu=natsend,fk_leftmenu=natsend_natstatus',
-            // This is a Left menu entry
-            'type'=>'left',
-            'titre'=>'New NatStatus',
-            'mainmenu'=>'natsend',
-            'leftmenu'=>'natsend_natstatus',
-            'url'=>'/natsend/natstatus_card.php?action=create',
-            // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-            'langs'=>'natsend@natsend',
-            'position'=>1100+$r,
-            // Define condition to show or hide menu entry. Use '$conf->natsend->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-            'enabled'=>'$conf->natsend->enabled',
-            // Use 'perms'=>'$user->rights->natsend->level1->level2' if you want your menu with a permission rules
-            'perms'=>'1',
-            'target'=>'',
-            // 0=Menu for internal users, 1=external users, 2=both
-            'user'=>2
-        );
-
-		/* END MODULEBUILDER LEFTMENU NATSTATUS */
 
         // Exports profiles provided by this module
-        $r = 1;
-        /* BEGIN MODULEBUILDER EXPORT NATSTATUS */
-        /*
-        $langs->load("natsend@natsend");
-        $this->export_code[$r]=$this->rights_class.'_'.$r;
-        $this->export_label[$r]='NatStatusLines';	// Translation key (used only if key ExportDataset_xxx_z not found)
-        $this->export_icon[$r]='natstatus@natsend';
-        // Define $this->export_fields_array, $this->export_TypeFields_array and $this->export_entities_array
-        $keyforclass = 'NatStatus'; $keyforclassfile='/mymobule/class/natstatus.class.php'; $keyforelement='natstatus@natsend';
-        include DOL_DOCUMENT_ROOT.'/core/commonfieldsinexport.inc.php';
-        //$this->export_fields_array[$r]['t.fieldtoadd']='FieldToAdd'; $this->export_TypeFields_array[$r]['t.fieldtoadd']='Text';
-        //unset($this->export_fields_array[$r]['t.fieldtoremove']);
-   		//$keyforclass = 'NatStatusLine'; $keyforclassfile='/natsend/class/natstatus.class.php'; $keyforelement='natstatusline@natsend'; $keyforalias='tl';
-		//include DOL_DOCUMENT_ROOT.'/core/commonfieldsinexport.inc.php';
-        $keyforselect='natstatus'; $keyforaliasextra='extra'; $keyforelement='natstatus@natsend';
-        include DOL_DOCUMENT_ROOT.'/core/extrafieldsinexport.inc.php';
-        //$keyforselect='natstatusline'; $keyforaliasextra='extraline'; $keyforelement='natstatusline@natsend';
-        //include DOL_DOCUMENT_ROOT.'/core/extrafieldsinexport.inc.php';
-        //$this->export_dependencies_array[$r] = array('natstatusline'=>array('tl.rowid','tl.ref')); // To force to activate one or several fields if we select some fields that need same (like to select a unique key if we ask a field of a child to avoid the DISTINCT to discard them, or for computed field than need several other fields)
-        //$this->export_special_array[$r] = array('t.field'=>'...');
-        //$this->export_examplevalues_array[$r] = array('t.field'=>'Example');
-        //$this->export_help_array[$r] = array('t.field'=>'FieldDescHelp');
-        $this->export_sql_start[$r]='SELECT DISTINCT ';
-        $this->export_sql_end[$r]  =' FROM '.MAIN_DB_PREFIX.'natstatus as t';
-        //$this->export_sql_end[$r]  =' LEFT JOIN '.MAIN_DB_PREFIX.'natstatus_line as tl ON tl.fk_natstatus = t.rowid';
-        $this->export_sql_end[$r] .=' WHERE 1 = 1';
-        $this->export_sql_end[$r] .=' AND t.entity IN ('.getEntity('natstatus').')';
-        $r++; */
-        /* END MODULEBUILDER EXPORT NATSTATUS */
-
-        // Imports profiles provided by this module
-        $r = 1;
-        /* BEGIN MODULEBUILDER IMPORT NATSTATUS */
-        /*
-         $langs->load("natsend@natsend");
-         $this->export_code[$r]=$this->rights_class.'_'.$r;
-         $this->export_label[$r]='NatStatusLines';	// Translation key (used only if key ExportDataset_xxx_z not found)
-         $this->export_icon[$r]='natstatus@natsend';
-         $keyforclass = 'NatStatus'; $keyforclassfile='/mymobule/class/natstatus.class.php'; $keyforelement='natstatus@natsend';
-         include DOL_DOCUMENT_ROOT.'/core/commonfieldsinexport.inc.php';
-         $keyforselect='natstatus'; $keyforaliasextra='extra'; $keyforelement='natstatus@natsend';
-         include DOL_DOCUMENT_ROOT.'/core/extrafieldsinexport.inc.php';
-         //$this->export_dependencies_array[$r]=array('mysubobject'=>'ts.rowid', 't.myfield'=>array('t.myfield2','t.myfield3')); // To force to activate one or several fields if we select some fields that need same (like to select a unique key if we ask a field of a child to avoid the DISTINCT to discard them, or for computed field than need several other fields)
-         $this->export_sql_start[$r]='SELECT DISTINCT ';
-         $this->export_sql_end[$r]  =' FROM '.MAIN_DB_PREFIX.'natstatus as t';
-         $this->export_sql_end[$r] .=' WHERE 1 = 1';
-         $this->export_sql_end[$r] .=' AND t.entity IN ('.getEntity('natstatus').')';
-         $r++; */
-        /* END MODULEBUILDER IMPORT NATSTATUS */
     }
 
     /**

@@ -58,9 +58,9 @@ class NatStatus extends CommonObject
 	public $picto = 'natstatus@natsend';
 
 
-	const STATUS_DRAFT = 0;
-	const STATUS_VALIDATED = 1;
-	const STATUS_CANCELED = 9;
+	const STATUS_SENT_OK = 0;
+	const STATUS_IN_TRANSIT = 1;
+	const STATUS_ERROR = 3;
 
 
 	/**
@@ -240,7 +240,7 @@ class NatStatus extends CommonObject
 	    // Clear fields
 	    $object->ref = empty($this->fields['ref']['default']) ? "copy_of_".$object->ref : $this->fields['ref']['default'];
 	    $object->label = empty($this->fields['label']['default']) ? $langs->trans("CopyOf")." ".$object->label : $this->fields['label']['default'];
-	    $object->status = self::STATUS_DRAFT;
+	    $object->status = self::STATUS_SENT_OK;
 	    // ...
 	    // Clear extrafields that are unique
 	    if (is_array($object->array_options) && count($object->array_options) > 0)
@@ -588,20 +588,7 @@ class NatStatus extends CommonObject
 	 */
 	public function setDraft($user, $notrigger = 0)
 	{
-		// Protection
-		if ($this->status <= self::STATUS_DRAFT)
-		{
-			return 0;
-		}
-
-		/*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->natsend->write))
-		 || (! empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->natsend->natsend_advance->validate))))
-		 {
-		 $this->error='Permission denied';
-		 return -1;
-		 }*/
-
-		return $this->setStatusCommon($user, self::STATUS_DRAFT, $notrigger, 'NATSTATUS_UNVALIDATE');
+		return 0;
 	}
 
 	/**
@@ -613,20 +600,7 @@ class NatStatus extends CommonObject
 	 */
 	public function cancel($user, $notrigger = 0)
 	{
-		// Protection
-		if ($this->status != self::STATUS_VALIDATED)
-		{
-			return 0;
-		}
-
-		/*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->natsend->write))
-		 || (! empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->natsend->natsend_advance->validate))))
-		 {
-		 $this->error='Permission denied';
-		 return -1;
-		 }*/
-
-		return $this->setStatusCommon($user, self::STATUS_CANCELED, $notrigger, 'NATSTATUS_CLOSE');
+        return 0;
 	}
 
 	/**
@@ -638,20 +612,7 @@ class NatStatus extends CommonObject
 	 */
 	public function reopen($user, $notrigger = 0)
 	{
-		// Protection
-		if ($this->status != self::STATUS_CANCELED)
-		{
-			return 0;
-		}
-
-		/*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->natsend->write))
-		 || (! empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->natsend->natsend_advance->validate))))
-		 {
-		 $this->error='Permission denied';
-		 return -1;
-		 }*/
-
-		return $this->setStatusCommon($user, self::STATUS_VALIDATED, $notrigger, 'NATSTATUS_REOPEN');
+        return 0;
 	}
 
     /**
@@ -666,60 +627,7 @@ class NatStatus extends CommonObject
      */
     public function getNomUrl($withpicto = 0, $option = '', $notooltip = 0, $morecss = '', $save_lastsearch_value = -1)
     {
-        global $conf, $langs, $hookmanager;
-
-        if (!empty($conf->dol_no_mouse_hover)) $notooltip = 1; // Force disable tooltips
-
-        $result = '';
-
-        $label = '<u>'.$langs->trans("NatStatus").'</u>';
-        $label .= '<br>';
-        $label .= '<b>'.$langs->trans('Ref').':</b> '.$this->ref;
-        if (isset($this->status)) {
-        	$label.= '<br><b>' . $langs->trans("Status").":</b> ".$this->getLibStatut(5);
-        }
-
-        $url = dol_buildpath('/natsend/natstatus_card.php', 1).'?id='.$this->id;
-
-        if ($option != 'nolink')
-        {
-            // Add param to save lastsearch_values or not
-            $add_save_lastsearch_values = ($save_lastsearch_value == 1 ? 1 : 0);
-            if ($save_lastsearch_value == -1 && preg_match('/list\.php/', $_SERVER["PHP_SELF"])) $add_save_lastsearch_values = 1;
-            if ($add_save_lastsearch_values) $url .= '&save_lastsearch_values=1';
-        }
-
-        $linkclose = '';
-        if (empty($notooltip))
-        {
-            if (!empty($conf->global->MAIN_OPTIMIZEFORTEXTBROWSER))
-            {
-                $label = $langs->trans("ShowNatStatus");
-                $linkclose .= ' alt="'.dol_escape_htmltag($label, 1).'"';
-            }
-            $linkclose .= ' title="'.dol_escape_htmltag($label, 1).'"';
-            $linkclose .= ' class="classfortooltip'.($morecss ? ' '.$morecss : '').'"';
-        }
-        else $linkclose = ($morecss ? ' class="'.$morecss.'"' : '');
-
-		$linkstart = '<a href="'.$url.'"';
-		$linkstart .= $linkclose.'>';
-		$linkend = '</a>';
-
-		$result .= $linkstart;
-		if ($withpicto) $result .= img_object(($notooltip ? '' : $label), ($this->picto ? $this->picto : 'generic'), ($notooltip ? (($withpicto != 2) ? 'class="paddingright"' : '') : 'class="'.(($withpicto != 2) ? 'paddingright ' : '').'classfortooltip"'), 0, 0, $notooltip ? 0 : 1);
-		if ($withpicto != 2) $result .= $this->ref;
-		$result .= $linkend;
-		//if ($withpicto != 2) $result.=(($addlabel && $this->label) ? $sep . dol_trunc($this->label, ($addlabel > 1 ? $addlabel : 0)) : '');
-
-		global $action, $hookmanager;
-		$hookmanager->initHooks(array('natstatusdao'));
-		$parameters = array('id'=>$this->id, 'getnomurl'=>$result);
-		$reshook = $hookmanager->executeHooks('getNomUrl', $parameters, $this, $action); // Note that $action and $object may have been modified by some hooks
-		if ($reshook > 0) $result = $hookmanager->resPrint;
-		else $result .= $hookmanager->resPrint;
-
-		return $result;
+		return "";
     }
 
 	/**
