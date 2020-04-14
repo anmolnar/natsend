@@ -99,8 +99,8 @@ class NatStatus extends CommonObject
 		'tms' => array('type'=>'timestamp', 'label'=>'DateModification', 'enabled'=>1, 'position'=>501, 'notnull'=>0, 'visible'=>-2,),
 		'fk_user_creat' => array('type'=>'integer:User:user/class/user.class.php', 'label'=>'UserAuthor', 'enabled'=>1, 'position'=>510, 'notnull'=>1, 'visible'=>-2, 'foreignkey'=>'user.rowid',),
 		'fk_user_modif' => array('type'=>'integer:User:user/class/user.class.php', 'label'=>'UserModif', 'enabled'=>1, 'position'=>511, 'notnull'=>-1, 'visible'=>-2,),
-		'status' => array('type'=>'smallint', 'label'=>'Status', 'enabled'=>1, 'position'=>1000, 'notnull'=>1, 'visible'=>1, 'index'=>1, 'arrayofkeyval'=>array('0'=>'Piszkozat', '1'=>'Hiteles&iacute;tve', '9'=>'Megszak&iacute;tva'),),
 		'fk_invoice' => array('type'=>'integer:Facture:compta/facture/class/facture.class.php:1', 'label'=>'Invoice', 'enabled'=>1, 'position'=>50, 'notnull'=>1, 'visible'=>1,),
+		'status' => array('type'=>'smallint', 'label'=>'Status', 'enabled'=>1, 'position'=>1000, 'notnull'=>1, 'visible'=>-1, 'index'=>1, 'arrayofkeyval'=>array('0'=>'Sent OK', '1'=>'In Transit', '3'=>'Error'),),
 	);
 	public $rowid;
 	public $ref;
@@ -109,8 +109,8 @@ class NatStatus extends CommonObject
 	public $tms;
 	public $fk_user_creat;
 	public $fk_user_modif;
-	public $status;
 	public $fk_invoice;
+	public $status;
 	// END MODULEBUILDER PROPERTIES
 
 

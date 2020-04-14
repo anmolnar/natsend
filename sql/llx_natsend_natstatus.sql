@@ -23,7 +23,7 @@ CREATE TABLE llx_natsend_natstatus(
 	tms timestamp, 
 	fk_user_creat integer NOT NULL, 
 	fk_user_modif integer, 
-	status smallint NOT NULL, 
-	fk_invoice integer NOT NULL
+	fk_invoice integer NOT NULL, 
+	status smallint NOT NULL
 	-- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;
