@@ -1,20 +1,6 @@
 #!/usr/bin/env php
 <?php
-/* Copyright (C) 2020   Andor Molnár     <andor@apache.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- */
+/* Copyright (C) 2020 Andor Molnár <andor@apache.org> */
 
 /**
  *      \file       scripts/natsend/natsend.php
@@ -72,6 +58,7 @@ $db->begin();
 
 // Examples for manipulating class MyObject
 dol_include_once("/compta/facture/class/facture.class.php");
+dol_include_once("/natsend/class/natstatus.class.php");
 //$myobject=new MyObject($db);
 
 // Example for inserting creating object in database
@@ -130,7 +117,14 @@ if ($resql)
 			{
 				$facture = new Facture($db);
 				$facture->fetch($obj->rowid);
-				var_dump($facture);
+
+				$natstatus = new NatStatus($db);
+				$natstatus->ref = $facture->ref;
+				$natstatus->fk_invoice = $facture->id;
+				$natstatus->status = NatStatus::STATUS_IN_TRANSIT;
+                $id = $natstatus->create($user);
+                if ($id < 0) { $error++; dol_print_error($db,$natstatus->error); }
+                else print "Natstatus created with id=".$id."\n";
 			}
 			$i++;
 		}

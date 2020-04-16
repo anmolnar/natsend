@@ -1,0 +1,14 @@
+{
+    "name": "dph/natsend",
+    "description": "NAT Sender",
+    "type": "project",
+    "require": {
+        "pzs/nav-online-invoice": "^2.0"
+    },
+    "authors": [
+        {
+            "name": "Andor Molnar",
+            "email": "andor@apache.org"
+        }
+    ]
+}
